@@ -83,25 +83,42 @@ class TiendaApp:
             if stock < 0:
                 raise ValueError("El stock no puede ser negativo.")
 
+            # Verificar si el ID ya existe
+            if self.sistema.buscar_producto(id_producto):
+                raise ValueError("El ID del producto ya existe.")
+
             producto = Producto(id_producto, nombre, precio, descripcion, stock)
             self.sistema.registrar_producto(producto)
-            messagebox.showinfo("Éxito", f"Producto {nombre} agregado correctamente.")
+
+            # Verificar que el producto se guardó en la base de datos
+            productos_db = self.sistema.conexion.mostrar_productos()
+            producto_guardado = any(p[0] == id_producto for p in productos_db)
+            if not producto_guardado:
+                raise ValueError("Error al guardar el producto en la base de datos.")
+
+            messagebox.showinfo("Éxito", f"Producto {nombre} agregado y guardado en la base de datos.")
             self.entry_id.delete(0, tk.END)
             self.entry_nombre.delete(0, tk.END)
             self.entry_precio.delete(0, tk.END)
             self.entry_descripcion.delete(0, tk.END)
             self.entry_stock.delete(0, tk.END)
-            self.actualizar_combobox()
+            self.actualizar_combobox(producto)
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
-    def actualizar_combobox(self):
-        productos = self.sistema.conexion.mostrar_productos()
-        self.pedido.detalles = [DetallePedido(Producto(p[0], p[1], p[2], p[3], p[4]), 1) for p in productos]
+    def actualizar_combobox(self, nuevo_producto=None):
+        # Mantener los detalles existentes y agregar el nuevo producto si se proporciona
+        if nuevo_producto:
+            detalle_nuevo = DetallePedido(nuevo_producto, 1)
+            if not any(d.producto.id_producto == nuevo_producto.id_producto for d in self.pedido.detalles):
+                self.pedido.agregar_detalle(detalle_nuevo)
+        
         self.combo['values'] = [
             f"{d.producto.nombre} (Cantidad: {d.cantidad}, Subtotal: {d.subtotal})"
             for d in self.pedido.detalles
         ]
+        if self.pedido.detalles:
+            self.combo.current(0)  # Seleccionar el primer elemento por defecto
 
     def generar_comprobante(self):
         try:
