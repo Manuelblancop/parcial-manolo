@@ -5,19 +5,19 @@ from clases.producto import Producto
 from clases.detalle_pedido import DetallePedido
 from clases.pedido import Pedido
 from clases.venta import Venta
-from clases.sistema_gestion import SistemaGestion  # Nueva importación
+from clases.sistema_gestion import SistemaGestion  
 from base_de_datos.conexion import Conexion
 
-# Resto del código de TiendaApp permanece igual
+
 class TiendaApp:
     def __init__(self, root):
-        self.sistema = SistemaGestion()  # Instancia de SistemaGestion
+        self.sistema = SistemaGestion()  
         self.root = root
         self.root.title("Sistema de Tienda")
         self.root.geometry("600x400")
         self.root.configure(bg="#f0f0f0")
 
-        # Inicializar datos
+      
         cliente1 = Cliente(1, "Pedro Pérez", "pedro@gmail.com")
         self.sistema.registrar_cliente(cliente1)
         producto1 = Producto(101, "Arepa", 2.5, "Arepa de queso", 10)
@@ -31,7 +31,7 @@ class TiendaApp:
         self.pedido.agregar_detalle(detalle1)
         self.pedido.agregar_detalle(detalle2)
 
-        # Interfaz
+       
         tk.Label(root, text="Seleccione un producto", font=("Arial", 14), bg="#f0f0f0").pack(pady=10)
         self.combo = ttk.Combobox(root, values=[
             f"{d.producto.nombre} (Cantidad: {d.cantidad}, Subtotal: {d.subtotal})"
