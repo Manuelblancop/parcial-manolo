@@ -17,7 +17,7 @@ class TiendaApp:
         self.root.geometry("600x400")
         self.root.configure(bg="#f0f0f0")
 
-      
+        
         cliente1 = Cliente(1, "Pedro Pérez", "pedro@gmail.com")
         self.sistema.registrar_cliente(cliente1)
         producto1 = Producto(101, "Arepa", 2.5, "Arepa de queso", 10)

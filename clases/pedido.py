@@ -9,3 +9,4 @@ class Pedido:
 
     def calcular_total(self):
         return sum(detalle.subtotal for detalle in self.detalles)
+    
