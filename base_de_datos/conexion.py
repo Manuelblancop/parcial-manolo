@@ -9,9 +9,9 @@ class Conexion:
         self.crear_tabla_productos()
 
     def crear_tabla_productos(self):
-        # Eliminar la tabla si existe para evitar duplicados
+        
         self.cursor.execute('DROP TABLE IF EXISTS productos')
-        # Crear la tabla
+       
         self.cursor.execute('''
             CREATE TABLE productos (
                 id_producto INTEGER PRIMARY KEY,
